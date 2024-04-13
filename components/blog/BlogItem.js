@@ -1,5 +1,6 @@
 "use client";
 import { getPostUser } from "@/app/blogs/blog-server-actions";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState, useRef } from "react";
 
@@ -32,17 +33,24 @@ const BlogItem = (props) => {
     <>
       <div className="p-4 md:w-1/3">
         <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
-          <img
-            className="lg:h-48 md:h-36 w-full object-cover object-center"
-            src={props.post.blogImg}
-            alt="blog"
-          />
+          <div className="relative">
+            <Image
+              width={1600}
+              height={800}
+              quality={100}
+              className="lg:h-48 md:h-36 w-full object-cover object-center"
+              src={props.post.blogImg}
+              alt="blog"
+            />
+          </div>
           <div className="p-6">
             <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
               {props.post.title}
             </h1>
             <div className="flex space-x-2 items-center">
-              <img
+              <Image
+                width={100}
+                height={100}
                 src={author.profile}
                 className="h-7 w-7 rounded-full object-cover object-center"
                 alt=""
