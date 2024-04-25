@@ -1,5 +1,11 @@
 module.exports = {
-  publicRuntimeConfig: {
-    mediaUrl: "./media",
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+      },
+    ],
   },
 };

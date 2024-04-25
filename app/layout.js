@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Toast from "@/components/Toast";
 import UserWrapper from "@/context/UserWrapper";
 import Footer from "@/components/Footer";
-const uri = process.env.MONGO_URI;
+
 
 // import Head from "next/head";
 // import DarkMode from "@/components/DarkMode";
@@ -20,11 +20,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const connect = async () => {
-    await mongoose.connect(uri);
-    console.log("Connected to mongoos");
-  };
-  connect();
   return (
     <html lang="en">
       <head>

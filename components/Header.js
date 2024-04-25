@@ -5,6 +5,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 import userContext from "@/context/userContext";
+import connect from "./server-actions";
 const Header = () => {
   const usContext = useContext(userContext);
   const dropProf = () => {
@@ -13,6 +14,7 @@ const Header = () => {
   };
   const { authenticated, fetchUser, user } = usContext;
   useEffect(() => {
+    connect();
     fetchUser();
   }, []);
   return (

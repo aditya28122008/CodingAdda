@@ -3,6 +3,7 @@ import Post from "@/models/Post";
 import { getCurrentUser } from "../../actions/server-actions";
 import { headers } from "next/headers";
 import fs from "fs/promises";
+import cloudinary from "@/cloudinary";
 
 export async function POST(request) {
   const headerList = headers();
@@ -16,28 +17,34 @@ export async function POST(request) {
     const blogImgName = `/media/blogs/${Date.now()}_${blogImg.name
       .replace(" ", "_")
       .toString()}`;
-    const written = await fs.writeFile(
-      `./public/${blogImgName}`,
-      buffer,
-      (err) => {
-        if (err) {
-          console.log(err);
-        } else {
-          return true;
-        }
+    await fs.writeFile(`./public/${blogImgName}`, buffer, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        return true;
       }
-    );
-
+    });
+    let dbFilename;
+    try {
+      const upLoad = await cloudinary.upload(`./public/${blogImgName}`);
+      // console.log(upLoad.secure_url);
+      dbFilename = upLoad.secure_url;
+      await fs.unlink(`./public/${blogImgName}`, (err) => console.log(err));
+    } catch (error) {
+      console.log(error);
+    }
     const add = await Post.create({
       title: post.get("title"),
       content: post.get("content"),
       desc: post.get("desc"),
       author: user.user.id,
-      blogImg: blogImgName,
+      blogImg: dbFilename,
     });
     return NextResponse.json({ success: true, add }, { status: 200 });
-  }
-  else{
-    return NextResponse.json({ success: false, err: "Unauthorized" }, { status: 401 });
+  } else {
+    return NextResponse.json(
+      { success: false, err: "Unauthorized" },
+      { status: 401 }
+    );
   }
 }
